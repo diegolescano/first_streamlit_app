@@ -14,8 +14,6 @@ streamlit.text('🥑🍞 Avocado Toast')
 
 streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')
 
-
-
 my_fruit_list = pandas.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt")
 my_fruit_list = my_fruit_list.set_index('Fruit')
 
@@ -62,8 +60,14 @@ def insert_row_snowflake(new_fruit):
   with my_cnx.cursor() as my_cur:
     my_cur.execute("insert into fruit_load_list values ('kiwi')")
     return "Thanks for adding " + new_fruit
-  
-add_my_fruit = streamlit.text_input('What fruit would you like to add?')
-insert_row_snowflake(add_my_fruit)
 
+try:  
+  add_my_fruit = streamlit.text_input('What fruit would you like to add?')
+  if not add_my_fruit:
+    streamlit.error('Please select a fruit to add')
+  else:
+    insert_row_snowflake(add_my_fruit)
 
+except URLError as e:
+  streamlit.error()    
+    
